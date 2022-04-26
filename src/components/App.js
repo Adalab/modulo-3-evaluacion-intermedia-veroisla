@@ -1,6 +1,6 @@
 import '../styles/App.scss';
 import friends from '../data/friends.json';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 function App() {
   //ESTADOS
@@ -18,12 +18,24 @@ function App() {
     ev.preventDefault();
   };
 
-  //AÑADIR TARJETA
-
+  //AÑADIR NUEVOS DATOS
   const handleNewQuote = (ev) => {
     setNewQuote({
       ...newquote,
       [ev.target.name]: ev.target.value,
+    });
+  };
+
+  //BOTÓN AÑADIR
+
+  const handleClick = (ev) => {
+    ev.preventDefault();
+    //Data quédate con lo que tienes y añade lo que esté en newquote
+    setData([...data, newquote]);
+    //Para que el input se quede otra vez vacío
+    setNewQuote({
+      quote: '',
+      character: '',
     });
   };
 
@@ -62,7 +74,9 @@ function App() {
             onChange={handleNewQuote}
             value={newquote.character}
           ></input>
-          <button type="button">Añadir</button>
+          <button type="button" onClick={handleClick}>
+            Añadir
+          </button>
         </form>
       </main>
     </>
