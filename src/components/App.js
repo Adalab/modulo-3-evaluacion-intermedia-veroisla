@@ -3,7 +3,7 @@ import friends from '../data/friends.json';
 import { useState } from 'react';
 
 function App() {
-  //ESTADOS, data, nuevaTarjeta y búsqeuda filtrado usuaria
+  //ESTADOS, data, nuevaTarjeta, búsqueda por frase y búsqueda por personaje
 
   const [data, setData] = useState(friends);
   const [newquote, setNewQuote] = useState({
@@ -11,6 +11,7 @@ function App() {
     character: '',
   });
   const [search, setsearch] = useState('');
+  const [searchByName, setSearchByName] = useState('');
 
   //FUNCIONES
 
@@ -45,11 +46,21 @@ function App() {
     setsearch(ev.target.value);
   };
 
+  //GUARDAR EL VALOR DEL INPUT, FILTRAR POR PERSONAJE
+
+  const handleSearchByName = (ev) => {
+    setSearchByName(ev.target.value);
+  };
+
   //RENDERIZAR LISTA
   const htmlData = data
 
     .filter((oneQuote) =>
       oneQuote.quote.toLocaleLowerCase().includes(search.toLowerCase())
+    )
+
+    .filter((oneQuote) =>
+      oneQuote.character.toLowerCase().includes(searchByName.toLowerCase())
     )
 
     .map((phrase, index) => {
@@ -70,12 +81,24 @@ function App() {
           <input
             type="search"
             name="search"
-            //Controlo el valor del input y creo función que gaurde el valor de la usuaria
+            //Controlo el valor del input y creo función que guarde el valor de la usuaria
             value={search}
             onChange={handleSearch}
           ></input>
-          {/* <label htmlFor="search">Filtrar por personaje</label>
-          <input type="search" name="search"></input> */}
+          <label htmlFor="searchByName">Filtrar por personaje</label>
+          <select
+            name="searchByName"
+            value={searchByName}
+            onChange={handleSearchByName}
+          >
+            <option value="">Todos</option>
+            <option value="Ross">Ross</option>
+            <option value="Monica">Monica</option>
+            <option value="Joey">Joey</option>
+            <option value="Phoebe">Phoebe</option>
+            <option value="Chandler">Chandler</option>
+            <option value="Rachel">Rachel</option>
+          </select>
         </form>
       </header>
       <main>
