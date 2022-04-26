@@ -3,15 +3,16 @@ import friends from '../data/friends.json';
 import { useState } from 'react';
 
 function App() {
-  //ESTADOS
+  //ESTADOS, data, nuevaTarjeta y búsqeuda filtrado usuaria
 
   const [data, setData] = useState(friends);
-
-  //PARA CREAR NUEVA TARJETA
   const [newquote, setNewQuote] = useState({
     quote: '',
     character: '',
   });
+  const [search, setsearch] = useState('');
+
+  //FUNCIONES
 
   //PREVENIR ENVÍO POR DEFECTO FORM
   const handleSubmit = (ev) => {
@@ -26,7 +27,7 @@ function App() {
     });
   };
 
-  //BOTÓN AÑADIR
+  //BOTÓN AÑADIR / PINTAR DATOS INTRODUCIDOS POR USUARIA
 
   const handleClick = (ev) => {
     ev.preventDefault();
@@ -39,34 +40,57 @@ function App() {
     });
   };
 
+  //GUARDAR EL VALOR DEL INPUT, DE FILTRAR POR FRASE
+  const handleSearch = (ev) => {
+    setsearch(ev.target.value);
+  };
+
   //RENDERIZAR LISTA
-  const htmlData = data.map((phrase, index) => {
-    return (
-      <li key={index}>
-        <p>{phrase.quote}</p>
-        <p>{phrase.character}</p>
-      </li>
-    );
-  });
+  const htmlData = data
+
+    .filter((oneQuote) =>
+      oneQuote.quote.toLocaleLowerCase().includes(search.toLowerCase())
+    )
+
+    .map((phrase, index) => {
+      return (
+        <li key={index}>
+          <p>{phrase.quote}</p>
+          <p>{phrase.character}</p>
+        </li>
+      );
+    });
 
   return (
     <>
       <header>
         <h1> Frases de Friends</h1>
+        <form>
+          <label htmlFor="search">Filtrar por frase</label>
+          <input
+            type="search"
+            name="search"
+            //Controlo el valor del input y creo función que gaurde el valor de la usuaria
+            value={search}
+            onChange={handleSearch}
+          ></input>
+          {/* <label htmlFor="search">Filtrar por personaje</label>
+          <input type="search" name="search"></input> */}
+        </form>
       </header>
       <main>
         <ul>{htmlData}</ul>
         <form onSubmit={handleSubmit}>
           <h3>Añadir una nueva frase</h3>
-          <label htmlFor="quote">Frase</label>
+          <label htmlFor="quote">Añade tu frase favorita:</label>
           <input
             type="text"
             name="quote"
-            placeholder="Busca tu frase preferida!"
+            placeholder="Escribe tu frase"
             onChange={handleNewQuote}
             value={newquote.quote}
           ></input>
-          <label htmlFor="character">Personaje</label>
+          <label htmlFor="character">¿Qué personaje dijo esta frase?</label>
           <input
             type="text"
             name="character"
