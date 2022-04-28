@@ -1,6 +1,7 @@
 import '../styles/App.scss';
 import friends from '../data/friends.json';
 import { useState } from 'react';
+import titleFriends from '../images/title.png';
 
 function App() {
   //ESTADOS, data, nuevaTarjeta, búsqueda por frase y búsqueda por personaje
@@ -65,67 +66,98 @@ function App() {
 
     .map((phrase, index) => {
       return (
-        <li key={index}>
-          <p>{phrase.quote}</p>
-          <p>{phrase.character}</p>
+        <li key={index} className="target">
+          <p className="target__quote">
+            {phrase.quote}
+            <span className="target__line"> -</span>
+          </p>
+          <p className="target__character">{phrase.character}</p>
         </li>
       );
     });
 
   return (
     <>
-      <header>
-        <h1> Frases de Friends</h1>
-        <form>
-          <label htmlFor="search">Filtrar por frase</label>
-          <input
-            type="search"
-            name="search"
-            //Controlo el valor del input y creo función que guarde el valor de la usuaria
-            value={search}
-            onChange={handleSearch}
-          ></input>
-          <label htmlFor="searchByName">Filtrar por personaje</label>
-          <select
-            name="searchByName"
-            value={searchByName}
-            onChange={handleSearchByName}
-          >
-            <option value="">Todos</option>
-            <option value="Ross">Ross</option>
-            <option value="Monica">Monica</option>
-            <option value="Joey">Joey</option>
-            <option value="Phoebe">Phoebe</option>
-            <option value="Chandler">Chandler</option>
-            <option value="Rachel">Rachel</option>
-          </select>
-        </form>
-      </header>
-      <main>
-        <ul>{htmlData}</ul>
-        <form onSubmit={handleSubmit}>
-          <h3>Añadir una nueva frase</h3>
-          <label htmlFor="quote">Añade tu frase favorita:</label>
-          <input
-            type="text"
-            name="quote"
-            placeholder="Escribe tu frase"
-            onChange={handleNewQuote}
-            value={newquote.quote}
-          ></input>
-          <label htmlFor="character">¿Qué personaje dijo esta frase?</label>
-          <input
-            type="text"
-            name="character"
-            placeholder="Personaje"
-            onChange={handleNewQuote}
-            value={newquote.character}
-          ></input>
-          <button type="button" onClick={handleClick}>
-            Añadir
-          </button>
-        </form>
-      </main>
+      <div className="wrapper">
+        <header className="header">
+          <h1>
+            <img
+              className="header__title"
+              alt="friends title"
+              src={titleFriends}
+            />
+          </h1>
+
+          <form className="header__form">
+            <label htmlFor="search" className="label">
+              Filtrar por frase
+            </label>
+            <input
+              className="input"
+              type="search"
+              name="search"
+              //Controlo el valor del input y creo función que guarde el valor de la usuaria
+              value={search}
+              onChange={handleSearch}
+            ></input>
+            <label htmlFor="searchByName" className="label">
+              Filtrar por personaje
+            </label>
+            <select
+              name="searchByName"
+              value={searchByName}
+              onChange={handleSearchByName}
+              className="input input__cursor"
+            >
+              <option value="">Todos</option>
+              <option value="Ross">Ross</option>
+              <option value="Monica">Monica</option>
+              <option value="Joey">Joey</option>
+              <option value="Phoebe">Phoebe</option>
+              <option value="Chandler">Chandler</option>
+              <option value="Rachel">Rachel</option>
+            </select>
+          </form>
+        </header>
+
+        <main className="main">
+          <ul className="target__ul">{htmlData}</ul>
+          <form onSubmit={handleSubmit} className="form">
+            <h3 className="newQuote">Añadir una nueva frase</h3>
+            <div className="newQuote__inputs">
+              <label htmlFor="quote" className="label">
+                Añade tu frase favorita:
+              </label>
+              <input
+                type="text"
+                name="quote"
+                placeholder="Escribe tu frase"
+                onChange={handleNewQuote}
+                value={newquote.quote}
+                className="input"
+              ></input>
+              <label htmlFor="character" className="label">
+                ¿Qué personaje dijo esta frase?
+              </label>
+              <input
+                type="text"
+                name="character"
+                placeholder="Personaje"
+                onChange={handleNewQuote}
+                value={newquote.character}
+                className="input"
+              ></input>
+            </div>
+            <button
+              type="button"
+              onClick={handleClick}
+              className="newQuote__button"
+            >
+              Añadir una frase
+            </button>
+          </form>
+        </main>
+      </div>
     </>
   );
 }
