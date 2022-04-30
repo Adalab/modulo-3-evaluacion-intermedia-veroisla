@@ -1,9 +1,18 @@
 import '../styles/App.scss';
 import friends from '../data/friends.json';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import titleFriends from '../images/title.png';
+import getQuotes from '../services/fetch';
 
 function App() {
+  useEffect(
+    () =>
+      getQuotes().then((datafromApi) => {
+        setData(datafromApi);
+      }),
+    []
+  );
+
   //ESTADOS, data, nuevaTarjeta, búsqueda por frase y búsqueda por personaje
 
   const [data, setData] = useState(friends);
@@ -16,12 +25,12 @@ function App() {
 
   //FUNCIONES
 
-  //PREVENIR ENVÍO POR DEFECTO FORM
+  //-PREVENIR ENVÍO POR DEFECTO FORM
   const handleSubmit = (ev) => {
     ev.preventDefault();
   };
 
-  //AÑADIR NUEVOS DATOS
+  //-AÑADIR NUEVOS DATOS
   const handleNewQuote = (ev) => {
     setNewQuote({
       ...newquote,
@@ -29,7 +38,7 @@ function App() {
     });
   };
 
-  //BOTÓN AÑADIR / PINTAR DATOS INTRODUCIDOS POR USUARIA
+  //-BOTÓN AÑADIR / PINTAR DATOS INTRODUCIDOS POR USUARIA
 
   const handleClick = (ev) => {
     ev.preventDefault();
@@ -42,18 +51,18 @@ function App() {
     });
   };
 
-  //GUARDAR EL VALOR DEL INPUT, DE FILTRAR POR FRASE
+  //-GUARDAR EL VALOR DEL INPUT, DE FILTRAR POR FRASE
   const handleSearch = (ev) => {
     setsearch(ev.target.value);
   };
 
-  //GUARDAR EL VALOR DEL INPUT, FILTRAR POR PERSONAJE
+  //-GUARDAR EL VALOR DEL INPUT, FILTRAR POR PERSONAJE
 
   const handleSearchByName = (ev) => {
     setSearchByName(ev.target.value);
   };
 
-  //RENDERIZAR LISTA
+  //-RENDERIZAR LISTA
   const htmlData = data
 
     .filter((oneQuote) =>
