@@ -1,27 +1,38 @@
 import '../styles/App.scss';
-import friends from '../data/friends.json';
+// import friends from '../data/friends.json';
 import { useEffect, useState } from 'react';
 import titleFriends from '../images/title.png';
 import getQuotes from '../services/fetch';
+import localStorage from '../services/localStorage';
 
 function App() {
-  useEffect(
-    () =>
-      getQuotes().then((datafromApi) => {
-        setData(datafromApi);
-      }),
-    []
-  );
+  // useEffect(
+  //   () =>
+  //     getQuotes().then((datafromApi) => {
+  //       setData(datafromApi);
+  //     }),
+  //   []
+  // );
 
   //ESTADOS, data, nuevaTarjeta, búsqueda por frase y búsqueda por personaje
 
-  const [data, setData] = useState(friends);
+  const [data, setData] = useState(localStorage.get('data', [])); //dame lo que tienes en el LS, y si no tienes nada dame un array vacio
   const [newquote, setNewQuote] = useState({
     quote: '',
     character: '',
   });
   const [search, setsearch] = useState('');
   const [searchByName, setSearchByName] = useState('');
+
+  useEffect(() => {
+    if (data.length === 0) {
+      // si data es igual 0 (no hay nada en el LS), entonces te llamo a la api, y si no te cojo lo del LS
+      getQuotes().then((datafromApi) => {
+        localStorage.set('data', datafromApi);
+        setData(datafromApi);
+      });
+    }
+  }, []);
 
   //FUNCIONES
 
@@ -41,11 +52,13 @@ function App() {
   //-BOTÓN AÑADIR / PINTAR DATOS INTRODUCIDOS POR USUARIA
 
   const handleClick = (ev) => {
-    ev.preventDefault();
-    //Data quédate con lo que tienes y añade lo que esté en newquote
-    setData([...data, newquote]);
-    //Para que el input se quede otra vez vacío
+    ev.preventDefault(); //Data quédate con lo que tienes y añade lo que esté en newquote
+    const newTarget = [...data, newquote]; //creo un listado de tarjetas
+    localStorage.set('data', newTarget); //gaurdo ese listado en el LS
+    setData(newTarget); //Actualiza mi variable data, con los datos de newTarget.
+
     setNewQuote({
+      //Para que el input se quede otra vez vacío
       quote: '',
       character: '',
     });
