@@ -6,14 +6,6 @@ import getQuotes from '../services/fetch';
 import localStorage from '../services/localStorage';
 
 function App() {
-  // useEffect(
-  //   () =>
-  //     getQuotes().then((datafromApi) => {
-  //       setData(datafromApi);
-  //     }),
-  //   []
-  // );
-
   //ESTADOS, data, nuevaTarjeta, búsqueda por frase y búsqueda por personaje
 
   const [data, setData] = useState(localStorage.get('data', [])); //dame lo que tienes en el LS, y si no tienes nada dame un array vacio
@@ -50,18 +42,22 @@ function App() {
   };
 
   //-BOTÓN AÑADIR / PINTAR DATOS INTRODUCIDOS POR USUARIA
-
   const handleClick = (ev) => {
     ev.preventDefault(); //Data quédate con lo que tienes y añade lo que esté en newquote
-    const newTarget = [...data, newquote]; //creo un listado de tarjetas
-    localStorage.set('data', newTarget); //gaurdo ese listado en el LS
-    setData(newTarget); //Actualiza mi variable data, con los datos de newTarget.
 
-    setNewQuote({
-      //Para que el input se quede otra vez vacío
-      quote: '',
-      character: '',
-    });
+    if (newquote.quote.length === 0 || newquote.character.length === 0) {
+      return alert('Revisa si has introducido todos los datos :)');
+      // return <p>Revisa si has introducio todos los datos</p>
+    } else {
+      const newTarget = [...data, newquote]; //creo un listado de tarjetas
+      localStorage.set('data', newTarget); //guardo ese listado en el LS
+      setData(newTarget); //Actualiza mi variable data, con los datos de newTarget.
+
+      setNewQuote({
+        quote: '',
+        character: '',
+      });
+    }
   };
 
   //-GUARDAR EL VALOR DEL INPUT, DE FILTRAR POR FRASE
@@ -70,7 +66,6 @@ function App() {
   };
 
   //-GUARDAR EL VALOR DEL INPUT, FILTRAR POR PERSONAJE
-
   const handleSearchByName = (ev) => {
     setSearchByName(ev.target.value);
   };
